@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>ICM WebFeeder sample</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="custom.css"/>
+
+</head>
+
+<body>
+
+    <div class="tab__wrap">
+
+        <div class="logo">
+            <a href="https://www.icmarkets.com/en/?camp=2060" target="_blank"><img src="logo.png"/> </a>
+        </div>
+
+        <ul id="tabs">
+            <li><a id="tab1">Forex</a></li>
+            <li><a id="tab2">Indices</a></li>
+            <li><a id="tab3">Metals</a></li>
+        </ul>
+        <div class="tab_content" id="tab1C">
+            <div class="livepriceBox_wrp flx-wrp">
+                <div id="EURUSD" class="live_price_box"></div>
+                <div id="AUDUSD" class="live_price_box"></div>
+                <div id="GBPUSD" class="live_price_box"></div>
+                <div id="USDJPY" class="live_price_box"></div>
+                <div id="USDCAD" class="live_price_box"></div>
+                <div id="GBPJPY" class="live_price_box"></div>
+            </div>
+        </div>
+        <div class="tab_content" id="tab2C">
+            <div class="livepriceBox_wrp tb2 flx-wrp">
+                <div id="US30" class="live_price_box"></div>
+                <div id="USTEC" class="live_price_box"></div>
+                <div id="UK100" class="live_price_box"></div>
+                <div id="AUS200" class="live_price_box"></div>
+                <div id="JP225" class="live_price_box"></div>
+                <div id="DE30" class="live_price_box"></div>
+
+            </div>
+        </div>
+        <div class="tab_content" id="tab3C">
+            <div class="livepriceBox_wrp tb3 flx-wrp">
+                <div id="XAGEUR" class="live_price_box"></div>
+                <div id="XAGUSD" class="live_price_box"></div>
+                <div id="XAUEUR" class="live_price_box"></div>
+                <div id="XAUUSD" class="live_price_box"></div>
+                <div id="XTIUSD" class="live_price_box"></div>
+            </div>
+        </div>
+
+        <a href="https://www.icmarkets.com/en/?camp=2060" target="_blank" class="btnBig">Open Live Account</a>
+        <a href="https://www.icmarkets.com/en/?camp=2060" target="_blank" class="btnBig live">Open Demo Account</a>
+
+
+
+
+       
+        
+    </div>
+
+    <!--Script references. -->
+
+    <!--Reference the jQuery library. -->
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.11.4/jquery-ui.min.js"></script>
+
+    <!--Custom-->
+    <script type="text/javascript" src="custom.js"></script>
+
+    <!--Reference the SignalR library. -->
+
+    <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+
+    <!--Add script to update the page and send messages.-->
+
+    <script type="text/javascript">
+
+        $(function () {
+    
+            /*http://qfeeder.icm:8080/live/hubs*/
+    
+            if(typeof window['jQuery']['signalR']!=='function'){throw new Error('SignalR:\x20SignalR\x20is\x20not\x20loaded.\x20Please\x20ensure\x20jquery.signalR-x.js\x20is\x20referenced\x20before\x20~/signalr/js.');}var signalR=window['jQuery']['signalR'];function makeProxyCallback(a,b){return function(){b['apply'](a,window['jQuery']['makeArray'](arguments));};}function registerHubProxies(c,g){var d,a,b,e,f;for(d in c){if(c['hasOwnProperty'](d)){a=c[d];if(!a['hubName']){continue;}if(g){f=a['on'];}else{f=a['off'];}for(b in a['client']){if(a['client']['hasOwnProperty'](b)){e=a['client'][b];if(!$['isFunction'](e)){continue;}f['call'](a,b,makeProxyCallback(a,e));}}}}}window['jQuery']['hubConnection']['prototype']['createHubProxies']=function(){var a={};this['starting'](function(){registerHubProxies(a,!![]);this['_registerSubscribedHubs']();})['disconnected'](function(){registerHubProxies(a,![]);});a['quotesHub']=this['createHubProxy']('quotesHub');a['quotesHub']['client']={};a['quotesHub']['server']={};return a;};signalR['hub']=window['jQuery']['hubConnection']('/live',{'useDefaultPath':![]});window['jQuery']['extend'](signalR,signalR['hub']['createHubProxies']());
+    
+    
+    
+            // set the hubs URL for the connection
+    
+            // consists of the address, port (if not 80), and path from the config
+    
+            $.connection.hub.url = "https://qfeeder.icmarkets.com:8080/live";
+    
+            $.connection.hub.logging = true;
+    
+            // specify group
+    
+            // if not specified, will be "default"
+    
+            $.connection.hub.qs = {
+                'group': 'price_widget'
+            };
+    
+    
+    
+            // override update handler
+    
+            // parameter is json object
+    
+            // {"Time":1367253023,"Symbol":"EURUSD","Bid":1.35252,"Ask":1.35255}
+    
+            // Time - server timestamp
+    
+            $.connection.quotesHub.client.update = function (quote) {
+    
+                var id = quote.Symbol.replace(".", "_");
+    
+                //if ($('#' + id).length === 0) {
+                //$("#quotes").append('<tr id="' + id + '"></tr>');
+                //}
+    
+    
+                var date = new Date(quote.Time * 1000 + new Date().getTimezoneOffset() * 60 * 1000);
+    
+                var $el = $('#' + id);
+    
+                var direction = quote.Direction === 1 ? '<i class="fall"></i>' : '<i class="rise"></i>';
+    
+                var spread = Math.round((quote.Ask - quote.Bid) * Math.pow(10, quote.Digits)) / 10;
+    
+                $el.css('color', quote.Direction === 1 ? 'red' : 'green');
+    
+                $el.html('<div class="wholeWrp"><div class="Title">' + quote.Symbol + "</div><div class='arrow'>" + direction + "</div><div class='bid'>" + quote.Bid.toFixed(2) + "</div><div class='ask'>" + quote.Ask.toFixed(2) + "</div><div class='spread'>" + spread + "</div><div class='date'>" + date.toLocaleTimeString() + "</div></div>");
+    
+                $el.effect("highlight");
+    
+            };
+    
+    
+    
+            $.connection.hub.start().done(function () {
+                var $status = $('#status');
+                $status.removeClass('alert-warning');
+                $status.addClass('alert-success');
+                $("#status").html("Connected");
+            });
+    
+        });
+    
+    </script>
+
+</body>
+
+</html>

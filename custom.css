@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css?family=Arimo:400,700');
+html {
+    height: 100%;
+    font-size: 100%;
+}
+
+body {
+    background-color: #111111;
+    font: 14px/20px Arimo, sans-serif;
+    width: 100%;
+    height: 100%;
+    color: #000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.tab__wrap {
+    width: 100%;
+    max-width: 684px;
+    margin: 40px auto;
+}
+
+#tabs {
+    display: flex;
+}
+
+#tabs li {
+    list-style: none;
+    text-transform: uppercase;
+    margin-right: 2px;
+}
+
+#tabs li a {
+    display: block;
+    line-height: 44px;
+    padding: 0 24px;
+    font-weight: 700;
+    color: white;
+    transition: all .3s ease;
+    background-color: rgba(255, 255, 255, .04);
+    cursor: pointer;
+    color: #00e02b;
+}
+
+#tabs li a.inactive {
+    background-color: rgba(0, 0, 0, .54);
+    color: rgba(255, 255, 255, .4)
+}
+
+#tabs li a:hover {
+    text-decoration: none;
+    color: #00e02b;
+}
+
+.livepriceBox_wrp {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.live_price_box {
+    flex: 1 1 44%;
+    margin: 0 15px 15px 0;
+    background-color: #171719 !important;
+}
+
+.Title {
+    background-color: rgba(255, 255, 255, .1);
+    font-weight: 700;
+    font-size: 20px;
+    padding: 15px 20px;
+}
+
+.wholeWrp {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.arrow {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+}
+
+.wholeWrp>div {
+    flex: 0 0 33.33%;
+    padding: 20px;
+}
+
+.wholeWrp .Title,
+.wholeWrp .date {
+    flex: 0 0 100%;
+}
+
+.wholeWrp .date {
+    padding: 2px 10px;
+    background-color: rgba(255, 255, 255, .06);
+    text-transform: uppercase;
+    font-size: 11px;
+    text-align: center;
+    color: rgba(255, 255, 255, .24)
+}
+
+.bid,
+.ask,
+.spread {
+    position: relative;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.bid:after,
+.ask:after,
+.spread:after {
+    font-size: 12px;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .34);
+}
+
+.bid:after {
+    content: 'Bid';
+}
+
+.ask:after {
+    content: 'Ask'
+}
+
+.spread:after {
+    content: 'Spread'
+}
+
+.arrow {
+    padding: 0 !important;
+}
+
+.rise {
+    background-image: url("rise.png");
+    width: 40px;
+    height: 20px;
+    display: inline-block;
+    background-size: 40px;
+}
+
+.fall {
+    background-image: url("fall.png");
+    width: 40px;
+    height: 23px;
+    display: inline-block;
+    background-size: 40px;
+}
+
+.fullwidth .live_price_box {
+    flex: 0 0 94%;
+}
+
+.btnBig {
+    display: inline-block;
+    line-height: 54px;
+    padding: 0 28px;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    background-color: rgba(255, 255, 255, .1);
+    text-transform: uppercase;
+    transition: all .3s ease;
+    margin-right: 12px;
+}
+
+.btnBig:hover {
+    text-decoration: none;
+    background-color: black;
+    color: white;
+}
+
+.logo {
+    margin-bottom: 30px;
+}
+
+.live {
+    color: #00e02b;
+}
