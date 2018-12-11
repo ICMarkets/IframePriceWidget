@@ -169,7 +169,7 @@ body {
 .btnBig {
     display: inline-block;
     line-height: 54px;
-    padding: 0 28px;
+    padding: 0 27px;
     font-size: 16px;
     font-weight: 700;
     color: white;
@@ -191,4 +191,19 @@ body {
 
 .live {
     color: #00e02b;
+}
+
+#button-container {
+    display: flex
+}
+
+#separator {
+    width: 1px;
+    height: 15px;
+}
+
+@media screen and (max-width: 507px) {
+    #button-container {
+        flex-direction: column;
+    }
 }
