@@ -30,34 +30,13 @@
             <li><a id="tab3">Metals</a></li>
         </ul>
         <div class="tab_content" id="tab1C">
-            <div class="livepriceBox_wrp flx-wrp">
-                <div id="EURUSD" class="live_price_box"></div>
-                <div id="AUDUSD" class="live_price_box"></div>
-                <div id="GBPUSD" class="live_price_box"></div>
-                <div id="USDJPY" class="live_price_box"></div>
-                <div id="USDCAD" class="live_price_box"></div>
-                <div id="GBPJPY" class="live_price_box"></div>
-            </div>
+            <div id="forex" class="livepriceBox_wrp flx-wrp"></div>
         </div>
         <div class="tab_content" id="tab2C">
-            <div class="livepriceBox_wrp tb2 flx-wrp">
-                <div id="US30" class="live_price_box"></div>
-                <div id="USTEC" class="live_price_box"></div>
-                <div id="UK100" class="live_price_box"></div>
-                <div id="AUS200" class="live_price_box"></div>
-                <div id="JP225" class="live_price_box"></div>
-                <div id="DE30" class="live_price_box"></div>
-
-            </div>
+            <div id="indices" class="livepriceBox_wrp tb2 flx-wrp"></div>
         </div>
         <div class="tab_content" id="tab3C">
-            <div class="livepriceBox_wrp tb3 flx-wrp">
-                <div id="XAGEUR" class="live_price_box"></div>
-                <div id="XAGUSD" class="live_price_box"></div>
-                <div id="XAUEUR" class="live_price_box"></div>
-                <div id="XAUUSD" class="live_price_box"></div>
-                <div id="XTIUSD" class="live_price_box"></div>
-            </div>
+            <div id="metals" class="livepriceBox_wrp tb3 flx-wrp"></div>
         </div>
 
         <div id="button-container">
@@ -65,11 +44,6 @@
             <div id="separator"></div>
             <a href="https://www.icmarkets.com/en/?camp=2060" target="_blank" class="btnBig live">Open Demo Account</a>
         </div>
-
-
-
-
-
     </div>
 
     <!--Script references. -->
@@ -125,32 +99,101 @@
 
             // Time - server timestamp
 
-            $.connection.quotesHub.client.update = function (quote) {
-
-                var id = quote.Symbol.replace(".", "_");
-
-                //if ($('#' + id).length === 0) {
-                //$("#quotes").append('<tr id="' + id + '"></tr>');
-                //}
-
-
-                var date = new Date(quote.Time * 1000 + new Date().getTimezoneOffset() * 60 * 1000);
-
-                var $el = $('#' + id);
-
-                var direction = quote.Direction === 1 ? '<i class="fall"></i>' : '<i class="rise"></i>';
-
-                var spread = Math.round((quote.Ask - quote.Bid) * Math.pow(10, quote.Digits)) / 10;
-
-                $el.css('color', quote.Direction === 1 ? 'red' : 'green');
-
-                $el.html('<div class="wholeWrp"><div class="Title">' + quote.Symbol + "</div><div class='arrow'>" + direction + "</div><div class='bid'>" + quote.Bid.toFixed(2) + "</div><div class='ask'>" + quote.Ask.toFixed(2) + "</div><div class='spread'>" + spread + "</div><div class='date'>" + date.toLocaleTimeString() + "</div></div>");
-
-                $el.effect("highlight");
-
+            var containers = {
+                forex:   document.getElementById('forex'),
+                indices: document.getElementById('indices'),
+                metals:  document.getElementById('metals')
             };
 
+            function create (symbol, container) {
+                var box = document.createElement('div');
+                box.id = symbol;
+                box.className = 'live_price_box';
 
+                var wholeWrp = document.createElement('div');
+                wholeWrp.className = 'wholeWrp';
+
+                var title = document.createElement('div');
+                title.className = 'Title';
+
+                var arrow = document.createElement('div');
+                arrow.className = 'arrow';
+
+                var direction = document.createElement('i');
+                arrow.appendChild(direction);
+
+                var bid = document.createElement('div');
+                bid.className = 'bid';
+
+                var ask = document.createElement('div');
+                ask.className = 'ask';
+
+                var spread = document.createElement('div');
+                spread.className = 'spread';
+
+                var date = document.createElement('div');
+                date.className = 'date';
+
+                wholeWrp.appendChild(title);
+                wholeWrp.appendChild(arrow);
+                wholeWrp.appendChild(bid);
+                wholeWrp.appendChild(ask);
+                wholeWrp.appendChild(spread);
+                wholeWrp.appendChild(date);
+
+                box.appendChild(wholeWrp);
+
+                container.appendChild(box);
+
+                return {
+                    box:       box,
+                    title:     title,
+                    direction: direction,
+                    bid:       bid,
+                    ask:       ask,
+                    spread:    spread,
+                    date:      date
+                };
+            }
+
+            function update (element, quote) {
+                element.direction.className = quote.Direction === 1 ? 'fall' : 'rise';
+                element.date.textContent = new Date(quote.Time * 1000 + new Date().getTimezoneOffset() * 60 * 1000).toLocaleTimeString();
+                element.spread.textContent = Math.round((quote.Ask - quote.Bid) * Math.pow(10, quote.Digits)) / 10;
+                element.box.style.color = quote.Direction === 1 ? 'red' : 'green';
+                element.title.textContent = quote.Symbol;
+                element.bid.textContent = quote.Bid.toFixed(2);
+                element.ask.textContent = quote.Ask.toFixed(2);
+            }
+
+            var elements = {
+                EURUSD: create('EURUSD', containers.forex),
+                AUDUSD: create('AUDUSD', containers.forex),
+                GBPUSD: create('GBPUSD', containers.forex),
+                USDJPY: create('USDJPY', containers.forex),
+                USDCAD: create('USDCAD', containers.forex),
+                GBPJPY: create('GBPJPY', containers.forex),
+
+                US30:   create('US30',   containers.indices),
+                USTEC:  create('USTEC',  containers.indices),
+                UK100:  create('UK100',  containers.indices),
+                AUS200: create('AUS200', containers.indices),
+                JP225:  create('JP225',  containers.indices),
+                DE30:   create('DE30',   containers.indices),
+
+                XAGEUR: create('XAGEUR', containers.metals),
+                XAGUSD: create('XAGUSD', containers.metals),
+                XAUEUR: create('XAUEUR', containers.metals),
+                XAUUSD: create('XAUUSD', containers.metals),
+                XTIUSD: create('XTIUSD', containers.metals)
+            };
+
+            $.connection.quotesHub.client.update = function (quote) {
+                var symbol = quote.Symbol.replace(".", "_");
+                var element = elements[symbol];
+
+                if (element) update(element, quote);
+            };
 
             $.connection.hub.start().done(function () {
                 var $status = $('#status');
