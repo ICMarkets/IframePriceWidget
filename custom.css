@@ -95,6 +95,7 @@ body {
 }
 
 .wholeWrp .Title,
+.wholeWrp .bid_ask_spread,
 .wholeWrp .date {
     flex: 0 0 100%;
 }
@@ -112,34 +113,16 @@ body {
 .ask,
 .spread {
     position: relative;
-    margin-top: 20px;
     font-size: 16px;
     font-weight: 700;
 }
 
-.bid:after,
-.ask:after,
-.spread:after {
+.bid_title,
+.ask_title,
+.spread_title {
     font-size: 12px;
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 20px;
     font-weight: 700;
-    text-transform: uppercase;
     color: rgba(255, 255, 255, .34);
-}
-
-.bid:after {
-    content: 'Bid';
-}
-
-.ask:after {
-    content: 'Ask'
-}
-
-.spread:after {
-    content: 'Spread'
 }
 
 .arrow {
@@ -197,6 +180,10 @@ body {
     display: flex
 }
 
+.bid_ask_spread {
+    display: flex;
+    justify-content: space-between;
+}
 #separator {
     width: 1px;
     height: 15px;

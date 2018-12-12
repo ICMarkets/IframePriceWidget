@@ -122,23 +122,55 @@
                 var direction = document.createElement('i');
                 arrow.appendChild(direction);
 
+                var bid_value = document.createElement('div');
+                bid_value.className = 'bid';
+
+                var bid_title = document.createElement('div');
+                bid_title.className = 'bid_title';
+                bid_title.textContent = 'BID';
+
                 var bid = document.createElement('div');
-                bid.className = 'bid';
+
+                var ask_value = document.createElement('div');
+                ask_value.className = 'ask';
+
+                var ask_title = document.createElement('div');
+                ask_title.className = 'ask_title';
+                ask_title.textContent = 'ASK';
 
                 var ask = document.createElement('div');
-                ask.className = 'ask';
+
+                var spread_value = document.createElement('div');
+                spread_value.className = 'spread';
+
+                var spread_title = document.createElement('div');
+                spread_title.className = 'spread_title';
+                spread_title.textContent = 'SPREAD';
 
                 var spread = document.createElement('div');
-                spread.className = 'spread';
 
                 var date = document.createElement('div');
                 date.className = 'date';
 
+                var bid_ask_spread = document.createElement('div');
+                bid_ask_spread.className = 'bid_ask_spread';
+
+                bid.appendChild(bid_title);
+                bid.appendChild(bid_value);
+
+                ask.appendChild(ask_title);
+                ask.appendChild(ask_value);
+
+                spread.appendChild(spread_title);
+                spread.appendChild(spread_value);
+
+                bid_ask_spread.appendChild(bid);
+                bid_ask_spread.appendChild(ask);
+                bid_ask_spread.appendChild(spread);
+
                 wholeWrp.appendChild(title);
                 wholeWrp.appendChild(arrow);
-                wholeWrp.appendChild(bid);
-                wholeWrp.appendChild(ask);
-                wholeWrp.appendChild(spread);
+                wholeWrp.appendChild(bid_ask_spread);
                 wholeWrp.appendChild(date);
 
                 box.appendChild(wholeWrp);
@@ -149,9 +181,9 @@
                     box:       box,
                     title:     title,
                     direction: direction,
-                    bid:       bid,
-                    ask:       ask,
-                    spread:    spread,
+                    bid:       bid_value,
+                    ask:       ask_value,
+                    spread:    spread_value,
                     date:      date
                 };
             }
