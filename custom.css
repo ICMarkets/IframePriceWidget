@@ -186,8 +186,12 @@ body {
 
 .bid_ask_spread {
     display: flex;
-    justify-content: space-between;
 }
+
+.bid_ask_spread div {
+    flex-basis: 33.33%;
+}
+
 #separator {
     width: 1px;
     height: 15px;
