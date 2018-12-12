@@ -298,6 +298,8 @@
     $.connection.hub.start().done(function () {
         window.requestAnimationFrame(raf);
     });
+
+    var camp = location.search.split('camp=')[1];
     </script>
 </head>
 
@@ -306,7 +308,7 @@
     <div class="tab__wrap">
 
         <div class="logo">
-            <a href="https://www.icmarkets.com/en/?camp=2060" target="_blank"><img src="logo.png"/> </a>
+            <a id="link_main" href="https://www.icmarkets.com/en/" target="_blank"><img src="logo.png"/> </a>
         </div>
 
         <ul id="tabs">
@@ -325,14 +327,21 @@
         </div>
 
         <div id="button-container">
-            <a href="https://www.icmarkets.com/en/open-trading-account/live?camp=2060" target="_blank" class="btnBig">Open Live Account</a>
+            <a id="link_live" href="https://www.icmarkets.com/en/open-trading-account/live" target="_blank" class="btnBig">Open Live Account</a>
             <div id="separator"></div>
-            <a href="https://www.icmarkets.com/en/open-trading-account/demo?camp=2060" target="_blank" class="btnBig live">Open Demo Account</a>
+            <a id="link_demo" href="https://www.icmarkets.com/en/open-trading-account/demo" target="_blank" class="btnBig live">Open Demo Account</a>
         </div>
     </div>
 
 
     <script>
+            [
+                'link_live',
+                'link_demo',
+                'link_main'
+            ].forEach(function (id) {
+                document.getElementById(id).href += '?camp=' + camp;
+            });
 
             var containers = {
                 forex:   document.getElementById('forex'),
