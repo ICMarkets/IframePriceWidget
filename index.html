@@ -12,8 +12,293 @@
 
     <title>ICM WebFeeder sample</title>
 
-    <link rel="stylesheet" href="custom.css"/>
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Arimo:400,700');
+    html {
+        height: 100%;
+        font-size: 100%;
+        font-family: sans-serif;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
 
+    body {
+        background-color: #111111;
+        font: 14px/20px Arimo, sans-serif;
+        width: 100%;
+        height: 100%;
+        color: #000;
+        margin: 0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        outline: none;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .tab__wrap {
+        width: 100%;
+        max-width: 684px;
+        margin: 40px auto;
+    }
+
+    #tabs {
+        display: flex;
+    }
+
+    #tabs li {
+        list-style: none;
+        text-transform: uppercase;
+        margin-right: 2px;
+    }
+
+    #tabs li a {
+        display: block;
+        line-height: 44px;
+        padding: 0 24px;
+        font-weight: 700;
+        color: white;
+        transition: all .3s ease;
+        background-color: rgba(255, 255, 255, .04);
+        cursor: pointer;
+        color: #00e02b;
+    }
+
+    #tabs li a.inactive {
+        background-color: rgba(0, 0, 0, .54);
+        color: rgba(255, 255, 255, .4)
+    }
+
+    #tabs li a:hover {
+        text-decoration: none;
+        color: #00e02b;
+    }
+
+    .livepriceBox_wrp {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .live_price_box {
+        flex: 1 1 44%;
+        margin: 0 15px 15px 0;
+        background-color: #171719 !important;
+    }
+
+    .Title {
+        background-color: rgba(255, 255, 255, .1);
+        font-weight: 700;
+        font-size: 20px;
+        padding: 15px 20px;
+    }
+
+    .wholeWrp {
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+    }
+
+    .arrow {
+        position: absolute;
+        top: 18px;
+        right: 20px;
+    }
+
+    .wholeWrp>div {
+        flex: 0 0 33.33%;
+        padding: 20px;
+    }
+
+    .wholeWrp .Title,
+    .wholeWrp .bid_ask_spread,
+    .wholeWrp .date {
+        flex: 0 0 100%;
+    }
+
+    .wholeWrp .date {
+        padding: 2px 10px;
+        background-color: rgba(255, 255, 255, .06);
+        text-transform: uppercase;
+        font-size: 11px;
+        text-align: center;
+        color: rgba(255, 255, 255, .24)
+    }
+
+    .bid,
+    .ask,
+    .spread {
+        position: relative;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .bid_title,
+    .ask_title,
+    .spread_title {
+        font-size: 12px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, .34);
+    }
+
+    .arrow {
+        padding: 0 !important;
+    }
+
+    .rise {
+        background-image: url("rise.png");
+        width: 40px;
+        height: 20px;
+        display: inline-block;
+        background-size: 40px;
+    }
+
+    .fall {
+        background-image: url("fall.png");
+        width: 40px;
+        height: 23px;
+        display: inline-block;
+        background-size: 40px;
+    }
+
+    .fullwidth .live_price_box {
+        flex: 0 0 94%;
+    }
+
+    .btnBig {
+        display: inline-block;
+        line-height: 54px;
+        padding: 0 27px;
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        background-color: rgba(255, 255, 255, .1);
+        text-transform: uppercase;
+        transition: all .3s ease;
+        margin-right: 12px;
+    }
+
+    .btnBig:hover {
+        text-decoration: none;
+        background-color: black;
+        color: white;
+    }
+
+    .logo {
+        margin-bottom: 30px;
+    }
+
+    .live {
+        color: #00e02b;
+    }
+
+    #button-container {
+        display: flex
+    }
+
+    .bid_ask_spread {
+        display: flex;
+    }
+
+    .bid_ask_spread div {
+        flex-basis: 33.33%;
+    }
+
+    #separator {
+        width: 1px;
+        height: 15px;
+    }
+
+    ol, ul {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    a {
+        color: #337ab7;
+        text-decoration: none;
+    }
+
+    @media screen and (max-width: 507px) {
+        #button-container {
+            flex-direction: column;
+        }
+    }
+
+    </style>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+    <script>/*http://qfeeder.icm:8080/live/hubs*/
+
+    if(typeof window['jQuery']['signalR']!=='function'){throw new Error('SignalR:\x20SignalR\x20is\x20not\x20loaded.\x20Please\x20ensure\x20jquery.signalR-x.js\x20is\x20referenced\x20before\x20~/signalr/js.');}var signalR=window['jQuery']['signalR'];function makeProxyCallback(a,b){return function(){b['apply'](a,window['jQuery']['makeArray'](arguments));};}function registerHubProxies(c,g){var d,a,b,e,f;for(d in c){if(c['hasOwnProperty'](d)){a=c[d];if(!a['hubName']){continue;}if(g){f=a['on'];}else{f=a['off'];}for(b in a['client']){if(a['client']['hasOwnProperty'](b)){e=a['client'][b];if(!$['isFunction'](e)){continue;}f['call'](a,b,makeProxyCallback(a,e));}}}}}window['jQuery']['hubConnection']['prototype']['createHubProxies']=function(){var a={};this['starting'](function(){registerHubProxies(a,!![]);this['_registerSubscribedHubs']();})['disconnected'](function(){registerHubProxies(a,![]);});a['quotesHub']=this['createHubProxy']('quotesHub');a['quotesHub']['client']={};a['quotesHub']['server']={};return a;};signalR['hub']=window['jQuery']['hubConnection']('/live',{'useDefaultPath':![]});window['jQuery']['extend'](signalR,signalR['hub']['createHubProxies']());
+
+
+
+    // set the hubs URL for the connection
+
+    // consists of the address, port (if not 80), and path from the config
+
+    $.connection.hub.url = "https://qfeeder.icmarkets.com:8080/live";
+
+    $.connection.hub.logging = true;
+
+    // specify group
+
+    // if not specified, will be "default"
+
+    $.connection.hub.qs = {
+        'group': 'price_widget'
+    };
+
+
+
+    // override update handler
+
+    // parameter is json object
+
+    // {"Time":1367253023,"Symbol":"EURUSD","Bid":1.35252,"Ask":1.35255}
+
+    // Time - server timestamp
+
+    var models = {};
+
+    function update_dom (element, quote) {
+        element.direction.className = quote.Direction === 1 ? 'fall' : 'rise';
+        element.date.textContent = new Date(quote.Time * 1000 + new Date().getTimezoneOffset() * 60 * 1000).toLocaleTimeString();
+        var mult = Math.pow(10, quote.Digits);
+        element.spread.textContent = Math.round(mult * quote.Ask - mult * quote.Bid) / 10;
+        element.box.style.color = quote.Direction === 1 ? 'red' : 'green';
+        element.title.textContent = quote.Symbol;
+        element.bid.textContent = quote.Bid;
+        element.ask.textContent = quote.Ask;
+    }
+
+    function update_model (quote) {
+        var symbol = quote.Symbol;
+        var element = elements[symbol];
+
+        if (element) models[symbol] = quote;
+    }
+
+    var elements = {};
+
+    function raf () {
+        Object.keys(models).forEach(function render (symbol) {
+            update_dom(elements[symbol], models[symbol]);
+            delete models[symbol];
+        });
+        window.requestAnimationFrame(raf);
+    }
+
+    $.connection.quotesHub.client.update = update_model;
+
+    $.connection.hub.start().done(function () {
+        window.requestAnimationFrame(raf);
+    });
+    </script>
 </head>
 
 <body>
@@ -46,53 +331,8 @@
         </div>
     </div>
 
-    <!--Script references. -->
 
-    <!--Reference the jQuery library. -->
-
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
-
-    <!--Reference the SignalR library. -->
-
-    <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
-
-    <!--Add script to update the page and send messages.-->
-
-    <script type="text/javascript">
-
-        $(function () {
-
-            /*http://qfeeder.icm:8080/live/hubs*/
-
-            if(typeof window['jQuery']['signalR']!=='function'){throw new Error('SignalR:\x20SignalR\x20is\x20not\x20loaded.\x20Please\x20ensure\x20jquery.signalR-x.js\x20is\x20referenced\x20before\x20~/signalr/js.');}var signalR=window['jQuery']['signalR'];function makeProxyCallback(a,b){return function(){b['apply'](a,window['jQuery']['makeArray'](arguments));};}function registerHubProxies(c,g){var d,a,b,e,f;for(d in c){if(c['hasOwnProperty'](d)){a=c[d];if(!a['hubName']){continue;}if(g){f=a['on'];}else{f=a['off'];}for(b in a['client']){if(a['client']['hasOwnProperty'](b)){e=a['client'][b];if(!$['isFunction'](e)){continue;}f['call'](a,b,makeProxyCallback(a,e));}}}}}window['jQuery']['hubConnection']['prototype']['createHubProxies']=function(){var a={};this['starting'](function(){registerHubProxies(a,!![]);this['_registerSubscribedHubs']();})['disconnected'](function(){registerHubProxies(a,![]);});a['quotesHub']=this['createHubProxy']('quotesHub');a['quotesHub']['client']={};a['quotesHub']['server']={};return a;};signalR['hub']=window['jQuery']['hubConnection']('/live',{'useDefaultPath':![]});window['jQuery']['extend'](signalR,signalR['hub']['createHubProxies']());
-
-
-
-            // set the hubs URL for the connection
-
-            // consists of the address, port (if not 80), and path from the config
-
-            $.connection.hub.url = "https://qfeeder.icmarkets.com:8080/live";
-
-            $.connection.hub.logging = true;
-
-            // specify group
-
-            // if not specified, will be "default"
-
-            $.connection.hub.qs = {
-                'group': 'price_widget'
-            };
-
-
-
-            // override update handler
-
-            // parameter is json object
-
-            // {"Time":1367253023,"Symbol":"EURUSD","Bid":1.35252,"Ask":1.35255}
-
-            // Time - server timestamp
+    <script>
 
             var containers = {
                 forex:   document.getElementById('forex'),
@@ -183,33 +423,7 @@
                 };
             }
 
-            function raf () {
-                Object.keys(models).forEach(function render (symbol) {
-                    update_dom(elements[symbol], models[symbol]);
-                    delete models[symbol];
-                });
-                window.requestAnimationFrame(raf);
-            }
-
-            function update_model (quote) {
-                var symbol = quote.Symbol;
-                var element = elements[symbol];
-
-                if (element) models[symbol] = quote;
-            }
-
-            function update_dom (element, quote) {
-                element.direction.className = quote.Direction === 1 ? 'fall' : 'rise';
-                element.date.textContent = new Date(quote.Time * 1000 + new Date().getTimezoneOffset() * 60 * 1000).toLocaleTimeString();
-                var mult = Math.pow(10, quote.Digits);
-                element.spread.textContent = Math.round(mult * quote.Ask - mult * quote.Bid) / 10;
-                element.box.style.color = quote.Direction === 1 ? 'red' : 'green';
-                element.title.textContent = quote.Symbol;
-                element.bid.textContent = quote.Bid;
-                element.ask.textContent = quote.Ask;
-            }
-
-            var elements = {
+            elements = {
                 EURUSD: create('EURUSD', containers.forex),
                 AUDUSD: create('AUDUSD', containers.forex),
                 GBPUSD: create('GBPUSD', containers.forex),
@@ -231,14 +445,6 @@
                 XTIUSD: create('XTIUSD', containers.metals)
             };
 
-            var models = {};
-
-            $.connection.quotesHub.client.update = update_model;
-
-            $.connection.hub.start().done(function () {
-                window.requestAnimationFrame(raf);
-            });
-
             $('#tabs li a:not(:first)').addClass('inactive');
             $('.tab_content').hide();
             $('.tab_content:first').show();
@@ -259,8 +465,6 @@
             if(wrap <= 500){
                $('body').addClass('fullwidth');
             }
-        });
-
     </script>
 
 </body>
