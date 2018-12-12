@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>ICM WebFeeder sample</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="custom.css"/>
 
 </head>
@@ -196,7 +196,7 @@
                 window.requestAnimationFrame(raf);
             }
 
-            function update (quote) {
+            function update_model (quote) {
                 var symbol = quote.Symbol.replace(".", "_");
                 var element = elements[symbol];
 
@@ -237,7 +237,7 @@
 
             var models = {};
 
-            $.connection.quotesHub.client.update = update;
+            $.connection.quotesHub.client.update = update_model;
 
             $.connection.hub.start().done(function () {
                 var $status = $('#status');
