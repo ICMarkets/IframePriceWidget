@@ -188,14 +188,29 @@
                 };
             }
 
-            function update (element, quote) {
+            function raf () {
+                Object.keys(models).forEach(function render (symbol) {
+                    update_dom(elements[symbol], models[symbol]);
+                    delete models[symbol];
+                });
+                window.requestAnimationFrame(raf);
+            }
+
+            function update (quote) {
+                var symbol = quote.Symbol.replace(".", "_");
+                var element = elements[symbol];
+
+                if (element) models[symbol] = quote;
+            }
+
+            function update_dom (element, quote) {
                 element.direction.className = quote.Direction === 1 ? 'fall' : 'rise';
                 element.date.textContent = new Date(quote.Time * 1000 + new Date().getTimezoneOffset() * 60 * 1000).toLocaleTimeString();
                 element.spread.textContent = Math.round((quote.Ask - quote.Bid) * Math.pow(10, quote.Digits)) / 10;
                 element.box.style.color = quote.Direction === 1 ? 'red' : 'green';
                 element.title.textContent = quote.Symbol;
-                element.bid.textContent = quote.Bid.toFixed(2);
-                element.ask.textContent = quote.Ask.toFixed(2);
+                element.bid.textContent = quote.Bid;
+                element.ask.textContent = quote.Ask;
             }
 
             var elements = {
@@ -220,18 +235,17 @@
                 XTIUSD: create('XTIUSD', containers.metals)
             };
 
-            $.connection.quotesHub.client.update = function (quote) {
-                var symbol = quote.Symbol.replace(".", "_");
-                var element = elements[symbol];
+            var models = {};
 
-                if (element) update(element, quote);
-            };
+            $.connection.quotesHub.client.update = update;
 
             $.connection.hub.start().done(function () {
                 var $status = $('#status');
                 $status.removeClass('alert-warning');
                 $status.addClass('alert-success');
                 $("#status").html("Connected");
+
+                window.requestAnimationFrame(raf);
             });
 
         });
