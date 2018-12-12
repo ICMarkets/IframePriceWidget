@@ -229,9 +229,9 @@
     }
 
     </style>
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
-    <script>/*http://qfeeder.icm:8080/live/hubs*/
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.3.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+    <script>/*https://qfeeder.icm:8080/live/hubs*/
 
     if(typeof window['jQuery']['signalR']!=='function'){throw new Error('SignalR:\x20SignalR\x20is\x20not\x20loaded.\x20Please\x20ensure\x20jquery.signalR-x.js\x20is\x20referenced\x20before\x20~/signalr/js.');}var signalR=window['jQuery']['signalR'];function makeProxyCallback(a,b){return function(){b['apply'](a,window['jQuery']['makeArray'](arguments));};}function registerHubProxies(c,g){var d,a,b,e,f;for(d in c){if(c['hasOwnProperty'](d)){a=c[d];if(!a['hubName']){continue;}if(g){f=a['on'];}else{f=a['off'];}for(b in a['client']){if(a['client']['hasOwnProperty'](b)){e=a['client'][b];if(!$['isFunction'](e)){continue;}f['call'](a,b,makeProxyCallback(a,e));}}}}}window['jQuery']['hubConnection']['prototype']['createHubProxies']=function(){var a={};this['starting'](function(){registerHubProxies(a,!![]);this['_registerSubscribedHubs']();})['disconnected'](function(){registerHubProxies(a,![]);});a['quotesHub']=this['createHubProxy']('quotesHub');a['quotesHub']['client']={};a['quotesHub']['server']={};return a;};signalR['hub']=window['jQuery']['hubConnection']('/live',{'useDefaultPath':![]});window['jQuery']['extend'](signalR,signalR['hub']['createHubProxies']());
 
