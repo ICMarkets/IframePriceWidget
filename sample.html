@@ -5,14 +5,16 @@
             display: flex;
         }
         .small {
-        	width:  400px;
-            height: 400px;
+        	width:  330px;
+            height: 1377px;
             margin: 20px 20px;
+            overflow: hidden;
         }
         .big {
-        	width:  700px;
-            height: 900px;
+        	width:  555px;
+            height: 770px;
             margin: 20px 20px;
+            overflow: hidden;
         }
         iframe {
             display: block;
@@ -20,14 +22,17 @@
             height: 100%;
             border: 0;
         }
+        iframe::-webkit-scrollbar {
+            display: none;
+        }
         </style>
     </head>
     <body>
         <div class="small">
-            <iframe src="https://cdn.icmarkets.com/widget/index.html?camp=2026" allowfullscreen></iframe>
+            <iframe src="https://cdn.icmarkets.com/widget/index.html?camp=2026" allowfullscreen scrolling="no"></iframe>
         </div>
         <div class="big">
-            <iframe src="https://cdn.icmarkets.com/widget/index.html?camp=2222" allowfullscreen></iframe>
+            <iframe src="https://cdn.icmarkets.com/widget/index.html?camp=2222" allowfullscreen scrolling="no"></iframe>
         </div>
     </body>
 </html>
